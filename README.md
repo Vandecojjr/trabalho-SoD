@@ -12,7 +12,7 @@
 - **Semestre Letivo:** 2023/2
 
 ## Desenvolvedores
-- **Integrantes:**
+- **Integrantes:**  
   Vanderlei  
   Luzani  
   Gabi Padilha  
