@@ -1,6 +1,6 @@
 # trabalho-SoD - Sistema de Gerenciamento Acadêmico
 
-![Logo da Universidade](https://imagensfree.com.br/wp-content/uploads/2019/12/logo-estacio-vertical-com-sombra-980x893.jpg)
+<img src="https://imagensfree.com.br/wp-content/uploads/2019/12/logo-estacio-vertical-com-sombra-980x893.jpg" alt="Logo da Universidade" width="200" height="200">
 
 ## Curso
 **Nome:** Técnologo de desenvolvimento fullstack
