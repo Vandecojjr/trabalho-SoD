@@ -1300,9 +1300,10 @@ def tela_principal():
                     entry_cad_msod1func.delete(0, END)
                     entry_cad_msod2sistem.delete(0, END)
                     entry_cad_msod2func.delete(0, END)
+                    atualizar_tabelas()
         except sqlite3.IntegrityError:
             messagebox.showerror("Erro","Este código já esta cadastrado!")
-            atualizar_tabelas()
+            
 
 
     #TODO // BUTTONS m.sod (4) cadastro
