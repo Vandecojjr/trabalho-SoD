@@ -13,12 +13,12 @@
 
 ## Desenvolvedores
 - **Integrantes:**
-  **Vanderlei**
-  **Luzani**
-  **Gabi Padilha**
-  **Daiana Lascala**
-  **Lucas Zaaitar**
-  **Carlos Souza**
+  Vanderlei  
+  Luzani  
+  Gabi Padilha  
+  Daiana Lascala  
+  Lucas Zaaitar  
+  Carlos Souza  
 
 ## Funcionamento do Programa
 [![Assista ao Vídeo](link_para_thumbnail_youtube.jpg)](link_para_video_youtube)
@@ -27,4 +27,4 @@
 
 **A Segregação de Funções (SoD) é um conceito fundamental em gestão de acesso e controle interno nas organizações. Ela refere-se à prática de dividir tarefas e responsabilidades entre diferentes indivíduos ou sistemas para evitar conflitos de interesse, reduzir riscos e prevenir fraudes.
 
-#Para visualizar o código instale a extensão do vscode "Colorful Comments" versão v1.0.0.
+**Para visualizar o código instale a extensão do vscode "Colorful Comments" versão v1.0.0.**
