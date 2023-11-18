@@ -1,9 +1,16 @@
 import os
 import tkinter as tk
-from tkinter import END, ttk,font
+from tkinter import END, ttk,font 
 from tkinter import messagebox
+from tkinter import Tk, filedialog
 from ttkthemes import ThemedTk
 import sqlite3
+import sqlite3
+import pandas as pd
+import openpyxl
+import xlsxwriter
+
+
 
 id_int_sod = 0
 id_interno = 0
@@ -22,6 +29,231 @@ id_int_user = 0
     
 ~-----------SUMÁRIO---------------SUMÁRIO-------------SUMÁRIO----------SUMÁRIO-------------SUMÁRIO-----------------!
 """
+def selecionar_arquivo():
+    root = Tk()
+    root.withdraw()  # Para ocultar a janela principal
+
+    caminho_arquivo = filedialog.askopenfilename(
+        title="Selecionar arquivo",
+        filetypes=[("Arquivos Excel", "*.xlsx"), ("Todos os arquivos", "*.*")]
+    )
+
+    return caminho_arquivo
+
+def ler_arquivo_xlsx():
+    try:
+        # Obtém o caminho do arquivo selecionado
+        caminho_arquivo = selecionar_arquivo()
+
+        if not caminho_arquivo:
+            return None
+
+        # Carrega o arquivo Excel
+        df1 = pd.read_excel(caminho_arquivo, sheet_name= 0)
+        df2 = pd.read_excel(caminho_arquivo, sheet_name= 1)
+        df3 = pd.read_excel(caminho_arquivo, sheet_name= 2)
+        df4 = pd.read_excel(caminho_arquivo, sheet_name= 3)
+
+        # Retorna o DataFrame para mais manipulações, se necessário
+        return df1 ,df2, df3, df4
+    except Exception as e:
+        return None
+def cadArquivo():
+    arquivo = ler_arquivo_xlsx()
+    def cadAqrquivoSistemas():
+        def iserirsistema():
+            cursor.execute("""
+                INSERT INTO sistemas(id, nome)
+                VALUES (?, ?)
+            """, (cod, nam))
+            bd.commit()
+
+        bd = sqlite3.connect('SOD_DB.db')
+        cursor = bd.cursor()
+
+        codigo = arquivo[0].iloc[:, 0].tolist()
+        nome = arquivo[0].iloc[:, 1].tolist()
+
+        index = []
+        contador = 0
+        for i in codigo:
+            if not isinstance(i, int):
+                index.append(contador)
+            contador += 1
+
+        indice = 0
+        for i in range(len(codigo)):
+
+            cursor.execute("""SELECT nome FROM sistemas;""")
+            verificaSeExistenome = [item[0] for item in cursor.fetchall()]
+            cursor.execute("""SELECT id FROM sistemas;""")
+            verificaSeExisteid = [item[0] for item in cursor.fetchall()]
+            
+            cod = codigo[indice]
+            nam = nome[indice]
+
+            if indice in index and nam not in verificaSeExistenome:
+                cod = 1 if not verificaSeExisteid else verificaSeExisteid[-1] + 1
+                iserirsistema()
+                indice += 1
+            elif nam in verificaSeExistenome:
+                indice += 1
+            elif cod in verificaSeExisteid and nam not in verificaSeExistenome:
+                cod = 1 if not verificaSeExisteid else verificaSeExisteid[-1] + 1
+                iserirsistema()
+                indice += 1
+            else:
+                iserirsistema()
+                indice += 1
+
+        bd.close()
+    def cadAqrquivoPerfils():
+        def iserirperfil():
+            cursor.execute("""
+                INSERT INTO perfil(nome, descricao,id_sistema)
+                VALUES (?, ?, ?)
+            """, (nam, desc, cod))
+            bd.commit()
+            
+        bd = sqlite3.connect('SOD_DB.db')
+        cursor = bd.cursor()
+
+        nome = arquivo[1].iloc[:, 0].tolist()
+        descricao = arquivo[1].iloc[:, 1].tolist()
+        codigoSistema = arquivo[1].iloc[:, 2].tolist()
+
+
+        index = []
+        contador = 0
+        for i in codigoSistema:
+            if not isinstance(i, int):
+                index.append(contador)
+            contador += 1
+
+        indice = 0
+        for i in range(len(codigoSistema)):
+            cursor.execute("""SELECT id FROM sistemas;""")
+            verificaSeExisteid = [item[0] for item in cursor.fetchall()]
+
+            cod = codigoSistema[indice]
+            nam = nome[indice]
+            desc = descricao[indice]
+
+            if indice in index or nam == 'nan' or desc == 'nan':
+                indice += 1
+            elif cod not in verificaSeExisteid:
+                indice += 1
+            else:
+                iserirperfil()
+                indice += 1
+        bd.close()
+    def cadAqrquivoUsuario():
+        def iserirusuario():
+            cursor.execute("""
+                INSERT INTO usuarios(nome, descricao,cpf)
+                VALUES (?, ?, ?)
+            """, (nam, desc, pf))
+            bd.commit()
+            
+        bd = sqlite3.connect('SOD_DB.db')
+        cursor = bd.cursor()
+
+        nome = arquivo[2].iloc[:, 0].tolist()
+        cpf = arquivo[2].iloc[:, 1].tolist()
+        descricao = arquivo[2].iloc[:, 2].tolist()
+
+        indice = 0
+        for i in range(len(cpf)):
+            cursor.execute("""SELECT cpf FROM usuarios;""")
+            verificacpf = [item[0] for item in cursor.fetchall()]
+
+            pf = str(cpf[indice])
+            nam = nome[indice]
+            desc = descricao[indice]
+
+            if pf == 'nan' or nam == 'nan' or desc == 'nan':
+                indice += 1
+            elif pf in verificacpf:
+                indice += 1
+            else:
+                iserirusuario()
+                indice += 1
+        bd.close()
+    def cadAqrquivoMsod():
+        def iserirMsod():
+            cursor.execute("""
+                                INSERT INTO MatrizSod(id_sistema_1,nome_perfil_1,id_sistema_2,nome_perfil_2)
+                                VALUES (?,?,?,?)
+                        """, (codS1,namP1,codS2,namP2))
+            bd.commit()
+            
+        bd = sqlite3.connect('SOD_DB.db')
+        cursor = bd.cursor()
+
+        s1 = arquivo[3].iloc[:, 0].tolist()
+        p1 = arquivo[3].iloc[:, 1].tolist()
+        s2 = arquivo[3].iloc[:, 2].tolist()
+        p2 = arquivo[3].iloc[:, 3].tolist()
+
+        indice = 0
+        for i in range(len(s1)):
+            cursor.execute("""SELECT id FROM sistemas;""")
+            verificaSeExisteid = [item[0] for item in cursor.fetchall()]
+            cursor.execute("""SELECT nome FROM perfil;""")
+            verificaNome = [item[0] for item in cursor.fetchall()]
+
+            codS1 = s1[indice]
+            namP1 = p1[indice]
+            codS2 = s2[indice]
+            namP2 = p2[indice]
+
+            if codS1 == 'nan' or codS2 == 'nan' or namP1 == 'nan' or namP2 == 'nan':
+                indice += 1
+            elif codS1 not in verificaSeExisteid or codS2 not in verificaSeExisteid:
+                indice += 1
+            elif namP1 not in verificaNome or namP2 not in verificaNome:
+                indice += 1
+            else:
+                iserirMsod()
+                indice += 1
+        bd.close()
+
+    cadAqrquivoSistemas()
+    cadAqrquivoPerfils()
+    cadAqrquivoUsuario()
+    cadAqrquivoMsod()
+def exportar_tabelas_sqlite_para_excel(caminho_destino=None):
+    tabelas = ['sistemas', 'perfil','usuarios','MatrizSod','perfil_usuarios']
+    conexao = bd = sqlite3.connect('SOD_DB.db')
+    try:
+        # Se o caminho_destino não for fornecido, abre uma janela para escolher o local
+        if caminho_destino is None:
+            root = Tk()
+            root.withdraw()
+            caminho_destino = filedialog.asksaveasfilename(
+                defaultextension=".xlsx",
+                filetypes=[("Arquivos Excel", "*.xlsx"), ("Todos os arquivos", "*.*")]
+            )
+            root.destroy()
+
+        # Cria um objeto ExcelWriter para escrever em várias sheets no arquivo Excel
+        with pd.ExcelWriter(caminho_destino, engine='xlsxwriter') as writer:
+            # Itera sobre as tabelas especificadas e escreve cada uma em uma sheet separada
+            for tabela in tabelas:
+                consulta_sql = f"SELECT * FROM {tabela};"
+                dados_do_banco = pd.read_sql_query(consulta_sql, conexao)
+                dados_do_banco.to_excel(writer, sheet_name=tabela, index=False)
+
+        print(f"As tabelas foram exportadas para {caminho_destino}")
+        return True
+    except Exception as e:
+        print(f"Erro ao exportar para o arquivo Excel: {e}")
+        return False
+    finally:
+        if conexao:
+            conexao.close()
+
+
 def valida_cnpj(cnpj):
     # Remove caracteres não numéricos
     cnpj = ''.join(filter(str.isdigit, cnpj))
@@ -83,6 +315,13 @@ def formata_cpf(cpf):
     cpf_formatado = f'{cpf[:3]}.{cpf[3:6]}.{cpf[6:9]}-{cpf[9:]}'
 
     return cpf_formatado
+
+def funcaoF1(event):
+    cadArquivo()
+def funcaoF2(event):
+    exportar_tabelas_sqlite_para_excel()
+
+
 #~ CODE
 def AbrirCadastro(janela_login):
         
@@ -316,7 +555,9 @@ def tela_principal():
     
     label_ver_nome = ttk.Label(sub_aba_sistemas_ver,text="Nome : ",font=fonte_negrito)#& label usando font editada
     label_ver_nome.place(x=265,y=85)#& configura a label
-    
+
+    label_info_S1 = ttk.Label(sub_aba_sistemas_ver,text="(F1) para importar um documento xlsx ou (F2) para exportar dados para um arquivo xlsx. \n(F5) para atualizar as tabelas",font=fonte_negrito)#& label usando font editada
+    label_info_S1.place(x=200, y=596)#& configura a label
     
     #TODO // Lista (TREE) Sistemas (1)
     list_sistemas_ver = ttk.Treeview(sub_aba_sistemas_ver, columns=("Nome"))#& Cria as Colunas
@@ -436,7 +677,6 @@ def tela_principal():
     
     label_ver_nome_perfis = ttk.Label(sub_aba_sistemas_ver_perfis,text="Nome do perfil : ",font=fonte_negrito)#& label usando font editada
     label_ver_nome_perfis.place(x=195,y=125)#& configura a label
-    
     
     #TODO // Lista (TREE) Sistemas (1)
     list_sistemas_ver_perfis = ttk.Treeview(sub_aba_sistemas_ver_perfis, columns=("CPF","Nome",)) #& Cria as Colunas
@@ -1304,13 +1544,15 @@ def tela_principal():
         except sqlite3.IntegrityError:
             messagebox.showerror("Erro","Este código já esta cadastrado!")
             
-
-
     #TODO // BUTTONS m.sod (4) cadastro
     button_cadastrar_msod = ttk.Button(sub_aba_msod_cad, text="Cadastrar Matriz",style="MeuBotao.TButton", command= cadMatrizSod) #& botão com style
     button_cadastrar_msod.place(x=330, y=250,width=450,height=70) #& Configura o botão
-    
-    
+    def funcaoF5(event):
+        atualizar_tabelas()
+
+    janela_principal.bind('<F5>', funcaoF5)
+    janela_principal.bind('<F1>', funcaoF1)
+    janela_principal.bind('<F2>', funcaoF2)
     janela_principal.mainloop() #& mantendo a janela principal aberta
     
 #~ END CODE
