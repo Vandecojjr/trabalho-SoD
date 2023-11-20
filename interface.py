@@ -29,6 +29,7 @@ id_int_user = 0
     
 ~-----------SUMÁRIO---------------SUMÁRIO-------------SUMÁRIO----------SUMÁRIO-------------SUMÁRIO-----------------!
 """
+#& Funcção que seleciona o arquivo XLSX
 def selecionar_arquivo():
     root = Tk()
     root.withdraw()  # Para ocultar a janela principal
@@ -39,7 +40,7 @@ def selecionar_arquivo():
     )
 
     return caminho_arquivo
-
+#& Funcção que faz a leitura do arquivo XLSX
 def ler_arquivo_xlsx():
     try:
         # Obtém o caminho do arquivo selecionado
@@ -58,6 +59,7 @@ def ler_arquivo_xlsx():
         return df1 ,df2, df3, df4
     except Exception as e:
         return None
+#& Funcção que cadasta os dados do arquivo XLSX
 def cadArquivo():
     arquivo = ler_arquivo_xlsx()
     def cadAqrquivoSistemas():
@@ -222,6 +224,7 @@ def cadArquivo():
     cadAqrquivoPerfils()
     cadAqrquivoUsuario()
     cadAqrquivoMsod()
+#& Funcção que exporta o arquivo XLSX
 def exportar_tabelas_sqlite_para_excel(caminho_destino=None):
     tabelas = ['sistemas', 'perfil','usuarios','MatrizSod','perfil_usuarios']
     conexao = bd = sqlite3.connect('SOD_DB.db')
@@ -253,7 +256,7 @@ def exportar_tabelas_sqlite_para_excel(caminho_destino=None):
         if conexao:
             conexao.close()
 
-
+#& valida o CNPJ.
 def valida_cnpj(cnpj):
     # Remove caracteres não numéricos
     cnpj = ''.join(filter(str.isdigit, cnpj))
@@ -263,6 +266,7 @@ def valida_cnpj(cnpj):
         return True
     else:
         return False
+#& formata o CNPJ.
 def formata_cnpj(cnpj):
     # Remove caracteres não numéricos
     cnpj = ''.join(filter(str.isdigit, cnpj))
@@ -271,6 +275,7 @@ def formata_cnpj(cnpj):
     cnpj_formatado = f'{cnpj[:2]}.{cnpj[2:5]}.{cnpj[5:8]}/{cnpj[8:12]}-{cnpj[12:]}'
 
     return cnpj_formatado
+#& valida o CPF.
 def valida_cpf(cpf):
     # Remove caracteres não numéricos
     cpf = ''.join(filter(str.isdigit, cpf))
@@ -307,6 +312,7 @@ def valida_cpf(cpf):
 
     # Se chegou até aqui, o CPF é válido
     return True
+#& formata o CNPJ.
 def formata_cpf(cpf):
     # Remove caracteres não numéricos
     cpf = ''.join(filter(str.isdigit, cpf))
@@ -315,9 +321,10 @@ def formata_cpf(cpf):
     cpf_formatado = f'{cpf[:3]}.{cpf[3:6]}.{cpf[6:9]}-{cpf[9:]}'
 
     return cpf_formatado
-
+#& Funcção atribuida ao botao F1
 def funcaoF1(event):
     cadArquivo()
+#& Funcção atribuida ao botao F2
 def funcaoF2(event):
     exportar_tabelas_sqlite_para_excel()
 
@@ -444,7 +451,8 @@ def tela_de_login():
                 messagebox.showerror("ERRO","Senha incorreta!")
             else:
                 janela_login.destroy() #& fecha a tela de login
-                tela_principal() #& abre a tela inicial
+                tela_info() #& abre a tela inicial
+                tela_principal()
         bd.close()
         
 
@@ -481,8 +489,21 @@ def tela_de_login():
     
     
 #~###################################################################################################
-    
+def tela_info():
+    janela_principal = ThemedTk(theme="adapta")  # cria a janela principal e dá um tema para ela
+    janela_principal.title("SoD Solutions")  # dá o nome para a janela principal
+    janela_principal.geometry('500x700')  # cria um tamanho fixo para a janela principal
+    janela_principal.resizable(0, 0)  # Bloqueia o redimensionamento da aplicação
+
+    fonte_negrito = ("Arial", 12, "bold")  # exemplo de definição de uma fonte negrito
+
+    label_ver_cpf = ttk.Label(janela_principal, text="Teste:", font=fonte_negrito)  # label usando font editada
+    label_ver_cpf.place(x=258, y=45)  # configura a label
+
+    janela_principal.mainloop()
+
 def tela_principal():
+    #& Funcção que atualiza as tabelas do frontend
     def atualizar_tabelas():
         atualizar_tabela_SOD()
         atualizar_tabela_de_perfis()
@@ -612,34 +633,8 @@ def tela_principal():
             messagebox.showerror("Erro","Por favor digite um código válido, ou selecione um item clicando duas vezes na tabela!")
         except:
             messagebox.showerror("Erro","Algum erro inesperado aconteceu!")
-
-    #Edita o sistema no banco de dados 
-    def editar_sistema():
-        global id_interno
-        if id_interno == 0:
-                messagebox.showerror("ERRO","Por favor selecione o item a ser editatdo clicando 2x na tabela.")
-        else:
-            try:
-                bd = sqlite3.connect('SOD_DB.db')
-                cursor = bd.cursor()
-                nome = entry_sistemas_ver_nome.get()
-                id = int(entry_sistemas_ver_codigo.get())
-                if id_interno == 0:
-                    cursor.execute("""SELECT id_interno FROM sistemas WHERE id = ?""", (id,))
-                    id_interno = cursor.fetchone()
-                cursor.execute("""UPDATE sistemas SET nome = ?, id = ? WHERE id_interno = ?""", (nome,id,id_interno[0],))
-                bd.commit()
-                bd.close()
-                atualizar_tabelas()
-                id_interno = 0
-            except ValueError:
-                messagebox.showerror("Erro","Por favor digite um código válido, ou selecione um item clicando duas vezes na tabela!")
-            except:
-                messagebox.showerror("Erro","Algum erro inesperado aconteceu!")
             
     #TODO //  BUTTONS sistemas | Sistemas Cadastrados  (1)
-    button_editar_sistemas = ttk.Button(sub_aba_sistemas_ver, text="Editar",style="MeuBotao.TButton", command= editar_sistema) #& botão com style
-    button_editar_sistemas.place(x=15, y=540) #& configura o botão
     
     button_excluir_sistemas = ttk.Button(sub_aba_sistemas_ver, text="Excluir",style="MeuBotao.TButton", command= deletar_sistema) #& botão com style
     button_excluir_sistemas.place(x=15, y=590) #& configura o botão
@@ -882,56 +877,9 @@ def tela_principal():
                 messagebox.showerror("Erro","Algum erro inesperado aconteceu!")
 
 
-    #Edita o sistema no banco de dados 
-    def editar_perfil():
-        global id_int_perfil
-        if id_int_perfil == 0:
-                messagebox.showerror("ERRO","Por favor selecione o item a ser editatdo clicando 2x na tabela.")
-        else:    
-            try:
-                bd = sqlite3.connect('SOD_DB.db')
-                cursor = bd.cursor()
-                nome = entry__ver_perfis_nome.get()
-                id = entry__ver_perfis_codigo.get()
-                desc = entry__ver_perfis_desc.get()
-                if len(nome) == 0:
-                    messagebox.showerror("Erro","O campo (nome) não pode ser vazio.")
-                elif len(desc) == 0:
-                    messagebox.showerror("Erro","O campo (descrição) não pode ser vazio.")
-                elif len(id) == 0:
-                    messagebox.showerror("Erro","O campo (codigo do sistema) não pode ser vazio.")
-                else:
-                    id = int(id)
-                    if id_int_perfil == 0:
-                        cursor.execute("""SELECT id FROM perfil WHERE nome = ? ORDER BY id DESC LIMIT 1""", (nome,))
-                        result = cursor.fetchone()
-                        if result:
-                            id_int_perfil = result[0]
-                        else:
-                            pass
-                    cursor.execute("""
-                            SELECT id FROM sistemas;
-                    """)
-                    codigosDosSitemas = [item[0] for item in cursor.fetchall()]
-                    if id not in codigosDosSitemas:
-                        messagebox.showerror("ERRO",f"O sitema ({id}) não existe! Tente um código existente.")
-                        bd.close()
-                    else:
-                        cursor.execute("""UPDATE perfil SET nome = ?, id_sistema = ?, descricao = ? WHERE id = ?""", (nome, id, desc, id_int_perfil))
-                        bd.commit()
-                        bd.close()
-                        atualizar_tabelas()
-                        id_int_perfil = 0
-            except ValueError:
-                messagebox.showerror("Erro", "Por favor digite um código válido, ou selecione um item clicando duas vezes na tabela!")
-            except Exception as e:
-                messagebox.showerror("Erro", f"Algum erro inesperado aconteceu: {str(e)}")
-
 
     #TODO //  BUTTONS perfis (2) Perfis Cadastrados
-    button_editar_ver_perfis_ = ttk.Button(sub_aba_perfis_ver, text="Editar",style="MeuBotao.TButton", command= editar_perfil)#& botão com style
-    button_editar_ver_perfis_.place(x=15, y=540) #& configura o botão
-    
+
     button_excluir_ver_perfis_ = ttk.Button(sub_aba_perfis_ver, text="Excluir",style="MeuBotao.TButton", command= deletar_perfil)#& botão com style
     button_excluir_ver_perfis_.place(x=15, y=590) #& configura o botão
     
@@ -1096,40 +1044,7 @@ def tela_principal():
         except:
             messagebox.showerror("Erro","Algum erro inesperado aconteceu!")
 
-    #Edita o sistema no banco de dados 
-    def editar_usuario():
-        global id_int_user
-        if id_int_perfil == 0:
-                messagebox.showerror("ERRO","Por favor selecione o item a ser editado clicando 2x na tabela.")
-        else:  
-            try:
-                bd = sqlite3.connect('SOD_DB.db')
-                cursor = bd.cursor()
-                nome = entry_ver_nome.get()
-                cpf = entry_ver_cpf.get()
-                desc = entry_ver_desc.get()
-                if valida_cpf(cpf) == False:
-                    messagebox.showerror("ERRO","O cpf foi digitado errado. Por favor tente novamente")
-                else:
-                    if len(cpf) == 11:
-                        cpf = formata_cpf(cpf)
-                    if id_int_user == 0:
-                        cursor.execute("""SELECT id FROM usuarios WHERE cpf = ?""", (cpf,))
-                        id_int_user = cursor.fetchone()
-                    cursor.execute("""UPDATE usuarios SET nome = ?, cpf = ?, descricao = ? WHERE id = ?""", (nome,cpf,desc,id_int_user[0],))
-                    bd.commit()
-                    bd.close()
-                    atualizar_tabelas()
-                    id_int_user = 0
-            except ValueError:
-                messagebox.showerror("Erro","Por favor digite um (cpf) válido, ou selecione um item clicando duas vezes na tabela!")
-            except:
-                messagebox.showerror("Erro","Algum erro inesperado aconteceu!")
-
-
     #TODO //  BUTTONS users (3) 
-    button_editar = ttk.Button(sub_aba_users_ver, text="Editar",style="MeuBotao.TButton", command= editar_usuario)#& botão com style
-    button_editar.place(x=15, y=540)#& configura o botão
     
     button_excluir = ttk.Button(sub_aba_users_ver, text="Excluir",style="MeuBotao.TButton", command= deletar_usuario)#& botão com style
     button_excluir.place(x=15, y=590)#& configura o botão
@@ -1417,53 +1332,8 @@ def tela_principal():
             except:
                 messagebox.showerror("Erro","Algum erro inesperado aconteceu!")
 
-    #Edita o sistema no banco de dados 
-    '''def editar_sod():
-        global id_int_sod
-        
-        if id_int_sod == 0:
-                messagebox.showerror("ERRO","Por favor selecione o item a ser excluido clicando 2x na tabela.")
-        else:
-            try:
-                bd = sqlite3.connect('SOD_DB.db')
-                cursor = bd.cursor()
-                cod1 = entry_msod1sistem.get()
-                pf1 = entry_msod1func.get()
-                cod2 = entry_msod2sistem.get()
-                pf2 = entry_msod2func.get()
-                cod1 = int(cod1)
-                cod2 = int(cod2)
-
-                cursor.execute("""
-                               SELECT id FROM sistemas;
-                               """)
-                idDositema = [item[0] for item in cursor.fetchall()]
-                if cod1 not in idDositema: 
-                    messagebox.showerror("Erro",f"O sistema ({cod1}) não existe!")
-                elif cod2 not in idDositema:
-                    messagebox.showerror("Erro",f"O sistema ({cod2}) não existe!")
-                else:
-                    cursor.execute("""
-                                SELECT nome FROM perfil;
-                        """)
-                    nomeperfil = [item[0] for item in cursor.fetchall()]
-                    if pf1 not in nomeperfil:
-                        messagebox.showerror("Erro",f"O perfil ({pf1}) não existe!")
-                    elif pf2 not in nomeperfil:
-                        messagebox.showerror("Erro",f"O perfil ({pf2}) não existe!")    
-                    else:   
-                        cursor.execute("""UPDATE MatrizSod SET id_sistema_1 = ?, nome_perfil_1 = ?,id_sistema_2 = ?, nome_perfil_2 = ? WHERE id = ?""", (cod1,pf1,cod2,pf2,id_int_sod,))
-                        bd.commit()
-                bd.close()
-                atualizar_tabela_SOD()
-                id_int_sod = 0
-            except:
-                messagebox.showerror("Erro","Algum erro inesperado aconteceu!")'''
-
 
     #TODO //  BUTTONS m.sod (4) 
-    #button_msodedit = ttk.Button(sub_aba_msod, text="Editar",style="MeuBotao.TButton", command= editar_sod)#& botão com style
-    #button_msodedit.place(x=15, y=540) #& configura o botão
     
     button_msodexc = ttk.Button(sub_aba_msod, text="Excluir",style="MeuBotao.TButton", command= deletar_sod)#& botão com style
     button_msodexc.place(x=15, y=590) #& configura o botão
@@ -1549,7 +1419,6 @@ def tela_principal():
     button_cadastrar_msod.place(x=330, y=250,width=450,height=70) #& Configura o botão
     def funcaoF5(event):
         atualizar_tabelas()
-
     janela_principal.bind('<F5>', funcaoF5)
     janela_principal.bind('<F1>', funcaoF1)
     janela_principal.bind('<F2>', funcaoF2)
