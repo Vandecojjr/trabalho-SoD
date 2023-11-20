@@ -4,7 +4,7 @@
 
 ## Curso
 **Nome:** Técnologo de desenvolvimento fullstack  
-**Universidade:** Universidade Estácio de sá
+**Universidade:** Universidade Estácio de Sá
 
 ## Informações da Turma
 - **Mundo:** 1
@@ -13,12 +13,12 @@
 
 ## Desenvolvedores
 - **Integrantes:**  
-  Vanderlei  
-  Luzani  
-  Gabi Padilha  
-  Daiana Lascala  
-  Lucas Zaaitar  
-  Carlos Souza  
+  Vanderlei Candido Morais Junior / 202307078506
+  Christopher Willy Pazetto /  202307632317
+  Gabriela Padilha Ferreira / 202307333476 
+  Daiana Maira de Oliveira Lascala / 202308199951
+  Lucas Zaaitar Jabbour Stilben / 202308029134
+  Carlos Alberto Gomes de Souza Junior / 202308038303
 
 ## Funcionamento do Programa
 [![Assista ao Vídeo](link_para_thumbnail_youtube.jpg)](link_para_video_youtube)
