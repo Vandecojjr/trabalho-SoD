@@ -21,7 +21,7 @@
   Carlos Alberto Gomes de Souza Junior / 202308038303  
 
 ## Funcionamento do Programa
-[![Assista ao Vídeo](link_para_thumbnail_youtube.jpg)](link_para_video_youtube)
+[![Assista ao Vídeo](link_para_thumbnail_youtube.jpg)]([link_para_video_youtube](https://www.youtube.com/watch?v=BOnDOOL8LSY))
 
 ## O que é a Segregação de Funções SOD?
 
