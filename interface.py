@@ -451,7 +451,7 @@ def tela_de_login():
                 messagebox.showerror("ERRO","Senha incorreta!")
             else:
                 janela_login.destroy() #& fecha a tela de login
-                tela_info() #& abre a tela inicial
+                #tela_info() #& abre a tela inicial
                 tela_principal()
         bd.close()
         
@@ -503,6 +503,7 @@ def tela_info():
     janela_principal.mainloop()
 
 def tela_principal():
+    messagebox.showinfo("SOBRE","Antes de usar os sitema aqui uma breve explicação de como usar.\nToda aba tem uma sub aba chamada de 'cadastro', onde fazemos a alimentação das tabelas.\nSe quiser importar os dados atraves de um arquivo XLSX é so apertar 'F1'\n Se quiser exportar os dados do sistema para um arquivo XLSX aperte 'F2'.\nE neste link '' um video sobre como usar o sistema.")
     #& Funcção que atualiza as tabelas do frontend
     def atualizar_tabelas():
         atualizar_tabela_SOD()
