@@ -22,7 +22,7 @@
 
 ## Funcionamento do Programa
 
-[![Assista ao Vídeo](https://img.youtube.com/vi/BOnDOOL8LSY/0.jpg)](https://www.youtube.com/watch?v=BOnDOOL8LSY)
+[![Assista ao Vídeo](https://img.youtube.com/vi/BOnDOOL8LSY/0.jpg)](https://www.youtube.com/watch?v=BOnDOOL8LSY){:target="_blank"}
 
 ## O que é a Segregação de Funções SOD?
 
