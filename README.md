@@ -8,8 +8,8 @@
 
 ## Informações da Turma
 - **Mundo:** 1
-- **Número da Turma:** 123
-- **Semestre Letivo:** 2023/2
+- **Número da Turma:** 2023/3
+- **Semestre Letivo:** 2023/3
 
 ## Desenvolvedores
 - **Integrantes:**  
