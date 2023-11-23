@@ -22,7 +22,7 @@
 
 ## Funcionamento do Programa
 
-“ Para instalar as bibliotecas é só dar um “Pip install” para cada uma das bibliotecas abaixo”  
+ Para instalar as bibliotecas é só dar um “Pip install” para cada uma das bibliotecas abaixo  
  tkinter  
  ttkthemes  
  sqlite3  
