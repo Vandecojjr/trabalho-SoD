@@ -22,9 +22,21 @@
 
 ## Funcionamento do Programa
 
+“ Para instalar as bibliotecas é só dar um “Pip install” para cada uma das bibliotecas abaixo”  
+ tkinter  
+ ttkthemes  
+ sqlite3  
+ pandas  
+ openpyxl  
+ xlsxwriter  
+
+ **Para importar os dados através de uma planilha do Excel use como exemplo o “arquivo_exemplo.xlsx”. Todos os dados devem ser preenchidos de acordo com os títulos das colunas de cada planilha que tem no arquivo. Obs o CPF deve ser preenchido com os pontos ok**  
+
+ Video do funcionamento do programa abaixo.
+
 [![Assista ao Vídeo](https://img.youtube.com/vi/BOnDOOL8LSY/0.jpg)](https://www.youtube.com/watch?v=BOnDOOL8LSY)  
 
-**Para importar os dados através de uma planilha do Excel use como exemplo o “arquivo_exemplo.xlsx”. Todos os dados devem ser preenchidos de acordo com os títulos das colunas de cada planilha que tem no arquivo. Obs o CPF deve ser preenchido com os pontos ok**
+
 
 ## O que é a Segregação de Funções SOD?
 
